@@ -1,0 +1,30 @@
+---
+# tasks file for ans_ad_domain_role
+- name: Search for group
+  ansible.builtin.shell:
+    cmd: getent group "domain users@tu.temple.edu" | wc -l
+  register: getent_output
+
+- name: Disply command output
+  ansible.builtin.debug:
+    msg: "{{ getent_output.stdout }}"
+
+- name: Set fact for ad_joined to false
+  ansible.builtin.set_fact:
+    ad_joined: false
+  when: getent_output.stdout |int == 0
+
+- name: Set fact for ad_joined to true
+  ansible.builtin.set_fact:
+    ad_joined: true
+  when: getent_output.stdout |int == 1
+
+- name: Tell me it needs to be joined
+  ansible.builtin.debug:
+    msg: "You need to join {{ inventory_hostname }} to AD"
+  when: not ad_joined
+
+- name: Tell me it's joined alredy
+  ansible.builtin.debug:
+    msg: "{{ inventory_hostname }} is already joined to AD"
+  when: ad_joined

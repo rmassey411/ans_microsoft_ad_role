@@ -1,0 +1,15 @@
+---
+# vars file for RedHat 7
+pkgs:
+  - adcli
+  - krb5-workstation
+  - oddjob
+  - oddjob-mkhomedir
+  - realmd
+  - sssd
+  - samba-common-tools
+
+svcs:
+  - oddjobd
+  - sssd
+  - sshd

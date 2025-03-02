@@ -1,0 +1,26 @@
+---
+# tasks file for ans_ad_domain_role
+- name: Verify AD Membership
+  include_tasks: ad_state_linux.yml
+
+- name: Tasks for leaving AD domain
+  block:
+    - name: Set OS-specific variables
+      include_vars: "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+
+    - name: Leave AD domain realm via adcli
+      # ansible.builtin.shell: echo '{{ ad_user_password }}' | adcli join --stdin-password -D {{ ad_domain_fqdn | lower }} -U {{ ad_user_name | lower }} --domain-ou={{ ad_computer_ou }} --os-name={{ ansible_distribution }} --os-version={{ ansible_distribution_major_version }}
+      ansible.builtin.shell: 
+        cmd: echo '{{ ad_user_password }}' | adcli delete-computer --stdin-password -D {{ ad_domain_fqdn | lower }} -U {{ ad_user_name | lower }}
+
+    # - name: Leave AD domain via realm
+    #   ansible.builtin.shell: 
+    #     cmd: echo '{{ ad_user_password }}' | realm leave -r -U {{ ad_user_name | lower }}
+
+    - name: Clear sssd cache
+      ansible.builtin.shell: 
+        cmd: sss_cache -E
+
+    - name: Reboot
+      reboot:
+  when: ad_joined

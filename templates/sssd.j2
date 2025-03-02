@@ -1,0 +1,40 @@
+[sssd]
+#debug_level                              = 0x0170
+domains                                  = {{ ad_domain_fqdn | lower }}
+config_file_version                      = 2
+services                                 = nss, pam
+
+[domain/{{ ad_domain_fqdn | lower }}]
+access_provider                          = ad
+ad_access_filter                         = DOM:{{ ad_domain_fqdn | lower }}:(|(memberOf:1.2.840.113556.1.4.1941:=CN={{ADGROUP1}},OU={{ORGUNIT1}},DC={{DOMAIN_NAME}},DC={{DOMAIN_EXT}})(memberOf:1.2.840.113556.1.4.1941:=CN={{ADGROUP2}},OU={{ORGUNIT1}},DC={{DOMAIN_NAME}},DC={{DOMAIN_EXT}}))
+ad_domain                                = {{ ad_domain_fqdn | lower }}
+ad_gpo_access_control                    = permissive
+#ad_site                                 = Default-First-Site-Name
+ad_update_samba_machine_account_password = True
+cache_credentials                        = True
+debug_level                              = 0x0170
+default_shell                            = /bin/bash
+#dns_resolver_timeout                     = 30
+dyndns_update                            = false
+fallback_homedir                         = /home/%u@%d
+id_provider                              = ad
+krb5_realm                               = {{ ad_domain_fqdn | upper }}
+krb5_store_password_if_offline           = True
+ldap_id_mapping                          = True
+#ldap_network_timeout                     = 30
+#ldap_opt_timeout                         = 30
+#ldap_search_timeout                      = 30
+realmd_tags                              = manages-system joined-with-adcli
+use_fully_qualified_names                = False
+
+[nss]
+#debug_level                              = 0x0170
+#timeout                                  = 60
+
+[pac]
+#debug_level                              = 0x0170
+#timeout                                  = 60
+
+[pam]
+#debug_level                              = 0x0170
+#timeout                                  = 60

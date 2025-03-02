@@ -1,7 +1,7 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Ansible code to help interacting with AD and AD members
 
 Requirements
 ------------

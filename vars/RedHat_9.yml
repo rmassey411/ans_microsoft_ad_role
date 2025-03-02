@@ -1,0 +1,16 @@
+---
+# vars file for RedHat 9
+pkgs:
+  - adcli
+  - authselect-compat
+  - krb5-workstation
+  - oddjob
+  - oddjob-mkhomedir
+  - realmd
+  - samba-common-tools
+  - sssd
+
+svcs:
+  - oddjobd
+  - sssd
+  - sshd
